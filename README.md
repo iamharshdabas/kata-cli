@@ -6,14 +6,19 @@
 
 ## 🚀 Setup & Installation
 
-### 1. Install Dependencies
+### 1. Clone & Navigate
+Clone the upstream repository into your local practice folder (e.g., `katas`):
+```bash
+git clone https://github.com/iamharshdabas/kata-cli.git katas
+cd katas
+```
 
+### 2. Install Dependencies
 ```bash
 go mod tidy
 ```
 
-### 2. Build & Run
-
+### 3. Build & Run
 ```bash
 # Run directly
 go run ./cmd/kata-cli
@@ -24,7 +29,6 @@ go build -o kata-cli ./cmd/kata-cli
 ```
 
 You can also use `just` if you have it installed:
-
 ```bash
 # Compile and run via justfile
 just build
@@ -33,28 +37,76 @@ just build
 
 ---
 
-## 💾 Git Remote Setup (Upstream/Fork)
+## 💾 Git Remote Setup (Upstream / Standalone Repository)
 
-When you first clone this repository, the remote named `origin` points to the upstream creator's repository. To sync your progress to your own fork while keeping the ability to pull updates:
+When you first clone this repository, the remote named `origin` points to the upstream creator's repository.
 
-### 1. Configure Remotes (Fork Setup)
+> [!TIP]
+> **Get Green Squares (GitHub Contributions):** Commits to a *forked* repository on GitHub do not count towards your contribution activity graph (green squares) unless they are merged into the upstream repository's default branch. Since you want to track your daily practice, it is highly recommended to create a **standalone repository** instead of a fork.
+
+### Method 1: Standalone Repository using GitHub CLI (Recommended)
+
+If you have the [GitHub CLI (`gh`)](https://cli.github.com/) installed, you can create a standalone repository in your account and link it:
+
+1. **Authenticate and set up Git credentials**:
+   ```bash
+   gh auth login
+   gh auth setup-git
+   ```
+
+2. **Create a new standalone repository on GitHub**:
+   ```bash
+   # Create a private or public repository (e.g. named 'katas')
+   gh repo create katas --private
+   ```
+
+3. **Configure your remotes & push**:
+   ```bash
+   # Rename the creator's remote to 'upstream'
+   git remote rename origin upstream
+
+   # Add your new standalone repository as 'origin'
+   git remote add origin https://github.com/YOUR_USERNAME/katas.git
+
+   # Push your history and set the tracking branch
+   git push -u origin main
+   ```
+
+---
+
+### Method 2: Automated Forking via GitHub CLI (Alternative)
+
+If you prefer to fork the repository directly and do not mind that your daily practice commits won't count as contributions on your profile:
 
 ```bash
-# Rename creator remote to 'upstream'
-git remote rename origin upstream
-
-# Add your personal repository as 'origin'
-git remote add origin git@github.com:YOUR_USERNAME/YOUR_KATA_REPO.git
-
-# Push your history to your personal fork
-git push -u origin main
+# Fork the repository and configure remotes automatically
+gh repo fork iamharshdabas/kata-cli --clone=false
 ```
+*This command automatically forks the repository to your account, renames the creator's remote to `upstream`, and configures your personal fork as `origin`.*
 
-_Note: If you skip this, the CLI will run local commits only, avoiding pushes to the upstream repository._
+---
 
-### 2. Pulling Creator Updates
+### Method 3: Standalone Repository via GitHub Website (If not using GitHub CLI)
 
-To pull new features and fixes without losing your personal spacing database (`db.json`):
+If you do not have the GitHub CLI installed, you can manually create a repository on the web:
+
+1. **Create a new repository**: Go to [github.com/new](https://github.com/new) and create a new repository (e.g., `katas`). Do **not** initialize it with a README, license, or .gitignore.
+2. **Configure your local remotes**:
+   ```bash
+   # Rename the creator's remote to 'upstream'
+   git remote rename origin upstream
+
+   # Add your personal repository as 'origin' (using HTTPS URL)
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_KATA_REPO.git
+
+   # Push your history to your personal repository
+   git push -u origin main
+   ```
+
+_Note: If you skip this setup, the CLI will run local commits only and will not push updates online._
+
+### 3. Pulling Creator Updates
+To pull new features and fixes from the creator without losing your personal spacing database (`db.json`):
 
 ```bash
 # Fetch updates from the creator
